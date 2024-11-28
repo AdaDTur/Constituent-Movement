@@ -19,3 +19,4 @@ properties to evaluate broad LLM performance on four types of constituent moveme
 performing unexpectedly around particle movement, LLMs generally align with human
 preferences around constituent ordering.
 
+![Figure One](fig1.jpg)
