@@ -11,11 +11,17 @@ the constituent length or complexity. Such theories are interesting in the conte
 natural language processing (NLP), because while recent advances in NLP have led to
 significant gains in the performance of large language models (LLMs), much remains
 unclear about how these models process language, and how this compares to human language
-processing. In particular, the question remains whether LLMs display the same patterns
+processing. 
+
+In particular, the question remains whether LLMs display the same patterns
 with constituent movement, and may provide insights into existing theories on when and 
-how the shift occurs in human language. We compare a variety of LLMs with diverse
-properties to evaluate broad LLM performance on four types of constituent movement:
+how the shift occurs in human language. 
+
+We compare a variety of LLMs with diverse properties to evaluate broad LLM performance
+on four types of constituent movement: 
+
 **heavy NP shift**, **particle movement**, **dative alternation**, and **multiple PPs**. 
+
 Despite performing unexpectedly around particle movement, LLMs generally align with human
 preferences around constituent ordering.
 
