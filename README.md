@@ -15,8 +15,18 @@ processing. In particular, the question remains whether LLMs display the same pa
 with constituent movement, and may provide insights into existing theories on when and 
 how the shift occurs in human language. We compare a variety of LLMs with diverse
 properties to evaluate broad LLM performance on four types of constituent movement:
-**heavy NP shift**, **particle movement**, **dative alternation**, and **multiple PPs**. Despite
-performing unexpectedly around particle movement, LLMs generally align with human
+**heavy NP shift**, **particle movement**, **dative alternation**, and **multiple PPs**. 
+Despite performing unexpectedly around particle movement, LLMs generally align with human
 preferences around constituent ordering.
 
 ![Figure One](fig1.jpg)
+
+Broadly speaking, a clear trend is maintained across humans and models, following what has
+been presented in prior linguistic research. Where human language sees motivation for 
+movement with increasing weight, model behavior follows closely.
+
+Interestingly, we observe an unexpected trend where instruction-tuned models, which
+consistently correlate less with human data than their corresponding base model, as well as,
+quite often, lower R-squared scores. This runs against our initial hypothesis around
+instruction-tuned models, and suggests inadequacy in providing consistent and explainable
+trends compared to base models.
