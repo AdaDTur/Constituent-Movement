@@ -1,6 +1,5 @@
 import json
 import numpy as np
-from minicons import scorer
 import os
 
 prepositions1 = ["with the coat", "from California"]
@@ -12,14 +11,6 @@ adjectives = ["wealthy", "tall", "chatty", "older"]
 
 count = 0
 dict_list = []
-
-from huggingface_hub import login
-login(token='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')
-
-auth_token = os.getenv('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')
-ilm_model = scorer.IncrementalLMScorer("sgugger/rwkv-430M-pile", 'cpu', token=auth_token) #sgugger/rwkv-430M-pile
-
-
 for subject in subjects:
 	for verb in verbs:
 		for noun in nouns:
@@ -45,7 +36,6 @@ for subject in subjects:
 									unshifted_sentence = f"{subject} {verb} {noun_split[0]} {', '.join(adj_list)} {noun_split[1]} {' '.join(prep_list)} {prep2}."
 									shifted_sentence = f"{subject} {verb} {prep2} {noun_split[0]} {', '.join(adj_list)} {noun_split[1]} {' '.join(prep_list)}."
 							data = [unshifted_sentence, shifted_sentence]
-							scores = ilm_model.sequence_score(data, reduction=lambda x: x.mean(0).item())
 							print("=========================")
 							print(count)
 							print(unshifted_sentence, str(scores[0]))
@@ -56,7 +46,7 @@ for subject in subjects:
 							dict_list.append(shifted_data)
 							count += 1
 
-with open('data_file_rwkv.json', 'w') as fp:
+with open('OUTPUT.json', 'w') as fp:
 	for dictionary in dict_list:
 		line = json.dumps(dictionary) + '\n'
 		fp.write(line)
