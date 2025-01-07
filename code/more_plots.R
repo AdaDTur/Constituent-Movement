@@ -3,6 +3,7 @@
 library(tidyverse)
 library(glue)
 library(rjson)
+library(stringr)
 
 MPP <- read_csv("Downloads/Mila/Constituent_Movement_LLMs/MPP.csv")
 human_data <- read_csv("Downloads/Mila/Constituent_Movement_LLMs/full_mpp_hs_data_new.csv")
@@ -74,44 +75,13 @@ MPP %>% pivot_longer(cols=c("gpt2_score", "gpt2_med_score", "gpt2_large_score", 
                               "gpt2_token_ratio" = "orange"), labels = c("Modifier Weight Ratio", "Syllable Weight Ratio", "Word Length Ratio", "Token Length Ratio"))
 
 
-### Do Model Results Correlate with Humans
-
+### Do Model Results Correlate with Human?
+human_data$numerized = lapply(strsplit(gsub('\\[|\\]', '', human_data$responses), ","), as.numeric)
 human_data <- human_data %>%
-  mutate(
-    responses = lapply(responses, function(x) {
-      if (is.na(x) || x == "") {
-        return(NA)  # Handle empty or missing values
-      }
-      as.numeric(strsplit(gsub("[\\[\\]]", "", x), ", ")[[1]])
-    }),
-    average = sapply(responses, function(x) {
-      if (all(is.na(x))) return(NA)  # Handle cases where responses could not be parsed
-      mean(x, na.rm = TRUE)
-    })
-  )
+  mutate(list_average = map_dbl(numerized, ~ mean(.x, na.rm = TRUE)))
 
-# Step 2: Reshape the data and filter for one model (e.g., 'gpt2_xl_score')
-reshaped_data <- human_data %>%
-  pivot_longer(
-    cols = c(
-      "gpt2_score", "gpt2_med_score", "gpt2_large_score", "gpt2_xl_score",
-      "llama_3_score", "llama_3_chat_score", "babyopt_score", "babyllama_score",
-      "mistral_0.3_score", "mistral_0.3_chat_score", "olmo_score", "olmo_chat_score"
-    ),
-    names_to = "source",
-    values_to = "score"
-  ) %>%
-  filter(source == "gpt2_xl_score" & !is.na(average) & !is.na(score))  # Select one model and filter non-NA rows
+human_data %>%
+  ggplot(aes(x=list_average, y=llama_3_score, colour=syll_ratio)) +
+  geom_point()
 
-# Step 3: Plot for the selected model
-ggplot(reshaped_data, aes(x = average, y = score)) +
-  geom_point(alpha = 0.6) +  # Scatter plot
-  annotate("rect", xmin = -Inf, xmax = Inf, ymin = -2, ymax = 1, fill = "lightgray", alpha = 0.2) +
-  geom_smooth(method = "lm", color = "blue", se = TRUE) +  # Regression line with shading
-  ggtitle("Correlation between GPT-2 XL and Human Responses") +
-  xlab("Mean of Human Responses") +
-  ylab("GPT-2 XL M Preference Score") +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5)
-  )
+cor(human_data$list_average, human_data$llama_3_score, method="spearman")
