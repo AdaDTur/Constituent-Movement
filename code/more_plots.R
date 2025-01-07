@@ -1,5 +1,3 @@
-#setwd('Users/Downloads/Mila/Constituent_Movement_LLMs')
-## ^^ Change that obviously
 library(tidyverse)
 library(glue)
 library(rjson)
@@ -57,22 +55,22 @@ MPP %>% pivot_longer(cols=c("gpt2_score", "gpt2_med_score", "gpt2_large_score", 
                               "mods_ratio" = "#D55E00"), labels = c("Modifier Weight Ratio", "Syllable Weight Ratio", "Word Length Ratio"))
 
 # Model-wise performance
-MPP %>% pivot_longer(cols=c("gpt2_score", "gpt2_med_score", "gpt2_large_score", "gpt2_xl_score", "llama_3_score", "llama_3_chat_score", "babyopt_score", "babyllama_score", "mistral_0.3_score", "mistral_0.3_chat_score", "olmo_score", "olmo_chat_score"), names_to = "source", values_to = "score") %>%
-  pivot_longer(cols=c("wordlength_ratio", "syll_ratio", "mods_ratio", "gpt2_token_ratio"), names_to="ratio_type", values_to = "ratio") %>% 
-  dplyr::select(score, source, ratio, ratio_type) %>% 
-  filter(source=='gpt2_score') %>% 
-  group_by(ratio_type, ratio, source) %>% 
-  summarise(mean_score = mean(score)) %>% 
-  ggplot(aes(x=ratio, y=mean_score, color=ratio_type)) +
-  geom_line() +
-  ggtitle("Model Preference Scores on Multiple PP Shift") + 
-  xlab("Ratio of First Constituent Weight to Second") + 
-  ylab(expression("Mean M"["preference"] ~ " Score")) + 
-  facet_wrap(~ `source`) +
-  scale_color_manual(values=c("wordlength_ratio" = "black", 
-                              "syll_ratio" = "#0072B2", 
-                              "mods_ratio" = "#D55E00",
-                              "gpt2_token_ratio" = "orange"), labels = c("Modifier Weight Ratio", "Syllable Weight Ratio", "Word Length Ratio", "Token Length Ratio"))
+#MPP %>% pivot_longer(cols=c("gpt2_score", "gpt2_med_score", "gpt2_large_score", "gpt2_xl_score", "llama_3_score", "llama_3_chat_score", "babyopt_score", "babyllama_score", "mistral_0.3_score", "mistral_0.3_chat_score", "olmo_score", "olmo_chat_score"), names_to = "source", values_to = "score") %>%
+#  pivot_longer(cols=c("wordlength_ratio", "syll_ratio", "mods_ratio", "gpt2_token_ratio"), names_to="ratio_type", values_to = "ratio") %>% 
+#  dplyr::select(score, source, ratio, ratio_type) %>% 
+#  filter(source=='gpt2_score') %>% 
+#  group_by(ratio_type, ratio, source) %>% 
+#  summarise(mean_score = mean(score)) %>% 
+#  ggplot(aes(x=ratio, y=mean_score, color=ratio_type)) +
+#  geom_line() +
+#  ggtitle("Model Preference Scores on Multiple PP Shift") + 
+#  xlab("Ratio of First Constituent Weight to Second") + 
+#  ylab(expression("Mean M"["preference"] ~ " Score")) + 
+#  facet_wrap(~ `source`) +
+#  scale_color_manual(values=c("wordlength_ratio" = "black", 
+#                              "syll_ratio" = "#0072B2", 
+#                              "mods_ratio" = "#D55E00",
+#                              "gpt2_token_ratio" = "orange"), labels = c("Modifier Weight Ratio", "Syllable Weight Ratio", "Word Length Ratio", "Token Length Ratio"))
 
 
 ### Do Model Results Correlate with Human?
@@ -84,4 +82,4 @@ human_data %>%
   ggplot(aes(x=list_average, y=llama_3_score, colour=syll_ratio)) +
   geom_point()
 
-cor(human_data$list_average, human_data$llama_3_score, method="spearman")
+cor(human_data$list_average, human_data$gpt2_xl_score, method="spearman")
