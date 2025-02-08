@@ -1,5 +1,3 @@
-setwd('C:\\Users\\gaura\\Desktop\\McGill Semesters\\Summer 2024\\Ada Project')
-## ^^ Change that obviously
 library(tidyverse)
 library(glue)
 
