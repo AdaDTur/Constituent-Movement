@@ -1,3 +1,5 @@
+### THIS REPO IS NOT YET FINALIZED. CONTENTS WILL LIKELY BE SUBJECT TO CHANGE.
+
 # Language Models Largely Exhibit Human-like Constituent Ordering Preferences
 
 *Ada D. Tur, Gaurav Kamath, Siva Reddy*
